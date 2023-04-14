@@ -101,27 +101,37 @@ export PATH=$PATH:~/Development/CSC/neo-java-web-sdk/tools
 export PATH=$PATH:~/Development/mongodb-osx-x86_64-3.2.19/bin
 
 
-# golang
-export GOPATH="/Users/i311846/Development/goworkspace"
-export PATH=$PATH:$GOPATH/bin
-export GOBIN=$GOPATH/bin
-
-
 # Set proxy for node
 function setproxy() {
-    npm config set proxy http://proxy:8080
-    npm config set https-proxy http://proxy:8080
-    git config --global http.proxy http://proxy:8080
-    export http_proxy="http://proxy:8080"
-    export https_proxy="http://proxy:8080"
+    export http_proxy="http://www-proxy-adcq7-new.us.oracle.com:80"
+    export https_proxy="http://www-proxy-adcq7-new.us.oracle.com:80"
+    export NO_PROXY="127.0.0.1,localhost,.oracle.com,.oraclecorp.com,.dev,.grungy.us,.local,.r0,.r1,.r2"
+    # export no_proxy=$NO_PROXY
 }
 
 function unsetproxy() {
-    npm config delete proxy
-    npm config delete https-proxy
-    git config --global --unset http.proxy
     unset http_proxy
     unset https_proxy
+    unset NO_PROXY
+}
+
+# Yubikey handler
+reload-ssh() {
+    ssh-add -e /usr/local/lib/opensc-pkcs11.so >> /dev/null
+    if [ $? -gt 0 ]; then
+        echo "Failed to remove previous card"
+    fi
+    ssh-add -s /usr/local/lib/opensc-pkcs11.so
+}
+
+function disalbeAV() {
+    sudo /usr/local/McAfee/AntiMalware/VSControl stop
+    sudo /usr/local/McAfee/AntiMalware/VSControl stopoas
+}
+
+function enableAV() {
+    sudo /usr/local/McAfee/AntiMalware/VSControl start
+    sudo /usr/local/McAfee/AntiMalware/VSControl startoas
 }
 
 # NPM shortcuts
@@ -160,6 +170,19 @@ function groot() {
 # Cordova
 alias cdv="cordova"
 alias cdvr="cordova run"
+
+# Android fastboot
+alias frb="fastboot reboot-bootloader"
+alias ff="fastboot flash"
+
+# Ojet
+alias o="ojet"
+alias os="ojet serve"
+alias ob="ojet build"
+alias obr="ojet build --release"
+
+#datalab
+alias datalab-cli=~/Development/DataLab/datalab-cli/bin/dev
 
 # Android fastboot
 alias frb="fastboot reboot-bootloader"
